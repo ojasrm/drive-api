@@ -1,18 +1,53 @@
+
 # Service Delivery Portal
 
-#Searce Internal Project
+### Internal Project
 
-This portal make a copy of templates selected in the team's shared google drive folder.
+Service Delivery Portal is an internal project, designed to implement standardised template creations within the internal team at [Searce](http://www.searce.com).
 
-This project is useful for Searce employees to easily create templates of various documents, presentations by simply searching the document name and they can also use filters to filter out data according to record type and region.
+- - -
+The Project is supposed to on Google Sites, but currently is deployed at Github Pages.
 
-#Functionality:
-1.Start with logging into your google(Searce) account.
-2.After sign-in successfull message type document name(full or partial) in search box.
-3.The matched data will be populated in table.
-4.Filter results by checking the checkboxes according to Record type and Region.
-5.Select one or more results from table.
-6.Click create template button.
-7.Once you get success message, the files will be copied to the drive folder.
-8.The link to drive folder is shown in popup box.
-9.If you do not have access to the files, then access denied popup will be shown.
+Link to the Portal: [SDP v.1.0](https://ojasrm.github.io/drive-api/)
+
+## Features
+- Dynamic Template Search.
+- View Template Before Creation.
+- Create Multiple Templates at once.
+- Responsive.
+
+
+## Demo
+1. Start with logging with your @searce.com account.
+2. After sign-in successfull alert, type Document Name to be searched in in search bar.
+3. The corresponding matched data will be fetched & populated in table.
+4. The search results can be filtered into Record and/or Region, by checking the corresponding components.
+5. Select one or more results from table & click 'Create Template' button.
+6. Once you get success message, the files will be copied in a Shared Drive, and a Folder.
+7. Incase, of unmatching Template or Incorrect Document ID, the user shall be prompted with an Error Message.
+8. Similar Error Module pops, incase the user has no access to the folder.
+9. Click on the 'Folder' Link, and your Template is ready to use.
+
+
+## Tech Stack
+
+**FrontEnd:** HTML, CSS, Bootstrap
+
+**Functionality:** JavaScript.
+
+**APIs:** [SheetSu](https://sheetsu.com/), [Google Drive API](https://developers.google.com/drive/api/v3/reference)
+
+## Authors
+
+- [@OjasMahajan](https://www.github.com/ojasrm)
+- [@MayankUkey](https://www.github.com/youmemonk)
+
+
+## Acknowledgements
+
+ - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
+ - [readme editor](https://readme.so/editor)
+ - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+
+  
+  
