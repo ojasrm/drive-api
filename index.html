@@ -5,8 +5,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" /> -->
 
     <!-- Google Sign In Button  -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -221,19 +219,32 @@
         function search_sheet() {
             const api_address = "https://sheetsu.com/apis/v1.0su/441f6bfab693";
             var x = document.getElementById("search");
-            var baseQuery = {};
-            successFunc = printit();
+            var baseQuery = {}; //? Object
+
+            // var baseQuery = {"Document Name" : ""}; //? Object
+            
+            //! Alternate Way
+            // console.log(x[0].value)
+
+            //! Lookup
+            successFunc = printit(); 
+
             baseQuery["Document Name"] = "*";
+            // console.log(baseQuery)
+
             reg = [];
             rec = [];
 
             if (x.elements[0].value) {
                 var searchQuery = "*" + x.elements[0].value + "*";
+                // console.log(searchQuery)
                 baseQuery["Document Name"] = searchQuery;
             }
 
+            //! Checking Records
             if (document.getElementById("gcp").checked == true) {
                 rec.push("GCP");
+                // console.log(rec)
             }
             if (document.getElementById("aws").checked == true) {
                 rec.push("AWS");
@@ -263,7 +274,9 @@
                 rec.push("MS");
             }
 
+            // console.log(rec)
 
+            //! Checking Regions
             if (document.getElementById("apac").checked == true) {
                 reg.push("APAC");
             }
@@ -277,6 +290,7 @@
                 reg.push("EMEA");
             }
 
+            //! For Multiple Selects
             if (reg.length > 0 && rec.length > 0) {
                 for (let i = 0; i < reg.length; i++) {
                     baseQuery["Region"] = reg[i];
@@ -327,12 +341,16 @@
                 ).then(successFunc, errorFunc);
             }
         }
+        console.log(data)
+        // console.log(document.getElementById('data'))
 
         var tableData = data;
         var url = []
         var i = 0;
 
-        function printit() {
+        // console.log(tableData)
+
+        function printit() { //* populates the table
             var temp = "";
             //Empty url array
             while (url.length > 0) {
@@ -372,16 +390,22 @@
 
         function errorFunc() {
             var temp = "";
-            document.getElementById("data").innerHTML = temp;
+            // document.getElementById("data").innerHTML = temp;
             document.getElementById("data").innerHTML = "No records found";
         };
 
+        //? Can this run directly in the script 
+        //! Should run directly while the page reloads
         function authenticate() {
             return gapi.auth2
                 .getAuthInstance()
                 .signIn({
-                    scope: "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.photos.readonly",
+                    // Use in the scope just in case
+                    // https://www.googleapis.com/auth/drive.photos.readonly
+                    scope: "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file",
                 })
+
+                //! Can be Removed
                 .then(
                     function () {
                         console.log("Sign-in successful");
@@ -394,10 +418,13 @@
                 );
         }
 
+        //! Should run directly when the script loads
         function loadClient() {
             gapi.client.setApiKey("AIzaSyALp5CeNEOTGlUZvQitm5Toxqn3roo0qas");
             return gapi.client
                 .load("https://content.googleapis.com/discovery/v1/apis/drive/v3/rest")
+                
+                //! Can be removed ?
                 .then(
                     function () {
                         console.log("GAPI client loaded for API");
@@ -411,8 +438,12 @@
         // Make sure the client is loaded and sign-in is complete before calling this method.
         function execute() {
 
-
+            console.log(url)
             function getIdFromUrl(url) {
+                // var pp = url.match(/[-\w]{25,}/);
+                // console.log(pp)
+                // console.log(url)
+
                 return url.match(/[-\w]{25,}/);
             }
 
@@ -430,6 +461,7 @@
                                 "parents": ["1Di1luMkvY2uxz6Rae8KeuDW80foEAHmZ"]
                             },
                         })
+
                         .then(
                             function (response) {
                                 // Handle the results here (response.result has the parsed body).

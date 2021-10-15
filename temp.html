@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-4">
+        <form class="input-group rounded p-1" id="search" target="" oninput="search_sheet()">
+          <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" name="fname" id="search_input" oninput="search_sheet()" />
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col border">
+        <div id="filter-record">
+          <h2 class="text-center">Filter by Record Type</h2>
+          <div class="row">
+            <div class="col-3 p-1">
+              <input value="GCP" type="checkbox" id="gcp" name="filter" onclick="search_sheet()" type="search" />
+              <label for="gcp">GCP</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="AWS" type="checkbox" id="aws" name="filter" onclick="search_sheet()" type="search" />
+              <label for="aws">AWS</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="GWS" type="checkbox" id="gws" name="filter" onclick="search_sheet()" />
+              <label for="gws">GWS</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="Happier" type="checkbox" id="happier" name="filter" onclick="search_sheet()" />
+              <label for="happier">Happier</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="Recognic" type="checkbox" id="recognic" name="filter" onclick="search_sheet()" />
+              <label for="recognic">Recognic</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3 p-1">
+              <input value="Location Intelligence" type="checkbox" id="location intelligence" name="filter"
+                onclick="search_sheet()" />
+              <label for="location intelligence">Location <br />Intelligence</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="AM" type="checkbox" id="am" name="filter" onclick="search_sheet()" />
+              <label for="am">AM</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="Chrome" type="checkbox" id="chrome" name="filter" onclick="search_sheet()" />
+              <label for="chrome">Chrome</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="MS" type="checkbox" id="ms" name="filter" onclick="search_sheet()" />
+              <label for="ms">MS</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="D&A" type="checkbox" id="d&a" name="filter" onclick="search_sheet()" />
+              <label for="d&a">D&A</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col border">
+        <div id="filter-region">
+          <h2 class="text-center">Filter by Region</h2>
+          <div class="row">
+            <div class="col-2 p-1">
+              <input value="APAC" type="checkbox" id="apac" name="filter" onclick="search_sheet()" />
+              <label for="apac">APAC</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="INDIA" type="checkbox" id="india" name="filter" onclick="search_sheet()" />
+              <label for="india">INDIA</label>
+            </div>
+            <div class="col-2 p-1">
+              <input type="checkbox" value="AMER" id="amer" name="filter" onclick="search_sheet()" />
+              <label for="amer">AMER</label>
+            </div>
+            <div class="col-2 p-1">
+              <input value="EMEA" type="checkbox" id="emea" name="filter" onclick="search_sheet()" />
+              <label for="emea">EMEA</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-2 p-2">
+        <button onclick="search_sheet()" type="button" class="btn btn-outline-primary">
+          search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Document ID</th>
+          <th>Project ID</th>
+          <th>Document Name</th>
+          <th>Document Link</th>
+          <th>Record Type</th>
+          <th>Region</th>
+        </tr>
+      </thead>
+      <tbody id="data"></tbody>
+    </table>
+  </div>
+
+  <script>
+    document
+      .getElementById("search_input")
+      .addEventListener("keypress", function (event) {
+        if (event.keyCode == 13) {
+          event.preventDefault();
+        }
+      });
+  </script>
+
+  <script>
+    const records = [
+      "GCP",
+      "AWS",
+      "GWS",
+      "Happier",
+      "Recognic",
+      "Location Intelligence",
+      "AM",
+      "Chrome",
+      "MS",
+      "D&A",
+    ];
+    const regions = ["APAC", "INDIA", "AMER", "EMEA"];
+    const sheet_api = "https://sheetdb.io/api/v1/py4noaoimyg3a/search?";
+
+    function search_api(query, success_callback) {
+      console.log(
+        "query:",
+        sheet_api + new URLSearchParams(query).toString()
+      );
+      axios
+        .get(sheet_api + new URLSearchParams(query).toString())
+        .then((response) => {
+          console.log(response.data);
+          success_callback(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          document.getElementById("data").innerHTML = error.message;
+        });
+    }
+
+    function search_sheet() {
+      var x = document.getElementById("search");
+      var query = {
+        "Document Name": "*"
+      };
+      successFunc = printit();
+      regs_checked = [];
+      recs_checked = [];
+
+      if (x.elements[0].value) {
+        var searchQuery = "*" + x.elements[0].value + "*";
+        query["Document Name"] = searchQuery;
+      }
+
+      for (const record of records) {
+        if (document.getElementById(record.toLowerCase()).checked == true) {
+          recs_checked.push(record);
+        }
+      }
+
+      for (const region of regions) {
+        if (document.getElementById(region.toLowerCase()).checked == true) {
+          regs_checked.push(region);
+        }
+      }
+
+      if (regs_checked.length > 0) {
+        if (recs_checked.length > 0) {
+          for (reg of regs_checked) {
+            query["Region"] = reg;
+            for (rec of recs_checked) {
+              query["Record type"] = rec;
+              search_api(query, successFunc);
+            }
+          }
+        } else {
+          for (reg of regs_checked) {
+            query["Region"] = reg;
+            search_api(query, successFunc);
+          }
+        }
+      } else {
+        if (recs_checked.length > 0) {
+          for (rec of recs_checked) {
+            query["Record type"] = rec;
+            search_api(query, successFunc);
+          }
+        } else {
+          search_api(query, successFunc);
+        }
+      }
+      console.log(temp);
+
+      if (!successFunc.temp) {
+        document.getElementById("data").innerHTML =
+          "<h3>No records found</h3>";
+      }
+    }
+
+    function printit() {
+      var temp = "";
+
+      function successFunc(data) {
+        if (data.length > 0) {
+          data.forEach((itemData) => {
+            temp += "<tr>";
+            temp += "<td>" + itemData["Document ID"] + "</td>";
+            temp += "<td>" + itemData["Project ID"] + "</td>";
+            temp += "<td>" + itemData["Document Name"] + "</td>";
+            temp += "<td>" + itemData["Document Link"] + "</td>";
+            temp += "<td>" + itemData["Record type"] + "</td>";
+            temp += "<td>" + itemData["Region"] + "</td>";
+          });
+        }
+        document.getElementById("data").innerHTML = temp;
+      }
+      return successFunc;
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+</body>
+
+</html>
