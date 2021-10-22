@@ -204,17 +204,34 @@
   </div>
   <script>
     // Fetch Data
-    const api_url =
-      "https://script.googleusercontent.com/a/macros/searce.com/echo?user_content_key=zkcBmls0xDMt2MsBXWq2ZZlUM_sTUFb6GOj0HslFq2SdxB6GO9U7EuWZc-SzGWES2AoB-uQ9Hcs8-sEwoJ_qyUoaf5YeoMejm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_nRPgeZU6HP-Yl9L_fup0xI5xQJLnggV41t7sOusIsA7oBcq7GU-kAcPNHe6BwwB9FlP2kMfvUn8h67WS6eGvnUrnUClQ7txaxz5_p69iB_S_p4LV1Kg6bDoE9nAgB7m3nSaAsPCb1w4&lib=MkQHuEW-EK887oNH3E2IUg4ExaAWmCXBj"
+    // const api_url =
+    //   "https://script.googleusercontent.com/a/macros/searce.com/echo?user_content_key=zkcBmls0xDMt2MsBXWq2ZZlUM_sTUFb6GOj0HslFq2SdxB6GO9U7EuWZc-SzGWES2AoB-uQ9Hcs8-sEwoJ_qyUoaf5YeoMejm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_nRPgeZU6HP-Yl9L_fup0xI5xQJLnggV41t7sOusIsA7oBcq7GU-kAcPNHe6BwwB9FlP2kMfvUn8h67WS6eGvnUrnUClQ7txaxz5_p69iB_S_p4LV1Kg6bDoE9nAgB7m3nSaAsPCb1w4&lib=MkQHuEW-EK887oNH3E2IUg4ExaAWmCXBj"
 
-    let fetchedData
-    fetch(api_url)
-      .then(res => res.json())
-      .then(data => {
-        fetchedData = data
-        console.log('Data fetched')
-      })
-      .catch(error => console.log('ERROR'))
+    let fetchedData;
+
+    google.script.run
+          .withSuccessHandler(getDataFromBackend)
+          .withUserObject(this)
+          .fetchData()
+
+    // fetch(api_url)
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     fetchedData = data
+    //     console.log('Data fetched')
+    //   })
+    //   .catch(error => console.log('ERROR'))
+
+    function getDataFromBackend(data) {
+            // console.log(typeof(data))
+            if(data){
+              fetchedData = data
+              console.log('Data fetched')
+            }
+            else{
+              console.log('Data fetch failed')
+            }
+        }
 
     //Search the sheet(fetchedData) with filters
     function search_sheet() {
@@ -420,6 +437,9 @@
       }
       i = 0;
 
+    google.script.run.withFailureHandler(search_sheet).doSomething();
+
+
       function successFunc(data) {
         if (data.length > 0) {
           data.forEach((itemData) => {
@@ -456,12 +476,15 @@
       document.getElementById("data").innerHTML = "No records found";
     };
 
+    var checkedUrl = [];
+
     function execute() {
+      // e.preventDefault();
+
       function getIdFromUrl(url) {
         return url.match(/[-\w]{25,}/);
       }
 
-      var checkedUrl = []
       //Selected url
       for (let i = 0; i < url.length; i++) {
         var x = url[i]
@@ -472,26 +495,47 @@
         }
       }
 
-      function copytemplate(checkedUrl) {
-        //  e.preventDefault();
+      google.script.run.withSuccessHandler(function(response) {
+        // console.log(response);
+      }).execute(checkedUrl)
 
-      }
+      // console.log(google.script.run.withSuccessHandler(function(response) {
+      //   console.log(response);
+      // }).execute(checkedUrl))
 
-      function addStudents(e) {
-        e.preventDefault();
+      console.log(checkedUrl);
 
-        var students = e.target.students.value.split('\n');
+      // function copytemplate(e) {
+      //    e.preventDefault();
 
-        google.script.run.withSuccessHandler(function (response) {
-            console.log(response);
-          })
-          .addStudents(students)
+      //   google.script.run.withSuccessHandler(function(response) {
+      //     console.log(response);
+      //   })
+      //     .copytemplate(checkedUrl)
+      // }
 
-      }
-      window.onload = main;
-      console.log('Selected files:', checkedUrl)
+      // function addStudents(e) {
+      //   e.preventDefault();
+
+      //   var students = e.target.students.value.split('\n');
+
+      //   google.script.run.withSuccessHandler(function (response) {
+      //       console.log(response);
+      //     })
+      //     .addStudents(students)
+
+      // }
+      // window.onload = main;
+      // console.log('Selected files:', checkedUrl)
 
     }
+    // console.log('Selected files:', checkedUrl);
+
+    // google.script.run.doSomething();
+
+    // window.onload = search_sheet;
+
+    // google.script.run.withFailureHandler(search_sheet).doSomething();
   </script>
 </body>
 

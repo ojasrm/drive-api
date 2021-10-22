@@ -2,36 +2,78 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id"
-        content="828363173928-blovod76p8vohpbemrggq5jnm2qb79li.apps.googleusercontent.com">
-    <title>Document</title>
+    <base target="_top">
+    <script>
+        function updateButton(data) {
+            // button.value = 'Clicked by ' + email;
+            // console.log(data)
+
+            var temp = ""
+            for (var itemData in data) {
+                temp += "<tr>";
+                // temp += "<td>" + "</td>";
+                temp += "<td>" + this.data[itemData][1] + "</td>";
+                // temp += "<td>" +
+                // `<a href=${itemData["Document Link"]}  target="_blank">
+                //             <img src="https://1000logos.net/wp-content/uploads/2020/05/Google-Docs-logo.png" 
+                //             alt="Err" width="30" height="auto"></a>` +
+                // "</td>";
+                // temp += "<td>" + itemData["Description"] + "</td>";
+                // temp += "<td>" + itemData["Record type"] + "</td>";
+                temp += "</tr>";
+                // i++;
+            }
+
+            console.log(data)
+
+            // data.forEach((itemData) => {
+            //     temp += "<tr>";
+            //     temp += "<td>" + `<input type="checkbox" id="multiple-${i}"/>` + "</td>";
+            //     temp += "<td>" + itemData["Document Name"] + "</td>";
+            //     temp += "<td>" +
+            //         `<a href=${itemData["Document Link"]}  target="_blank">
+            //             <img src="https://1000logos.net/wp-content/uploads/2020/05/Google-Docs-logo.png" 
+            //             alt="Err" width="30" height="auto"></a>` +
+            //         "</td>";
+            //     temp += "<td>" + itemData["Description"] + "</td>";
+            //     temp += "<td>" + itemData["Record type"] + "</td>";
+            //     i++;
+            // });
+
+            document.getElementById("data").innerHTML = temp;
+            console.log(data)
+            // tableData = data;
+
+        }
+
+        // console.log(data)
+    </script>
 </head>
 
 <body>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <input type="button" value="Click Here" onclick="google.script.run
+          .withSuccessHandler(updateButton)
+          .withUserObject(this)
+          .getDo()" />
 
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    <a href="#" onclick="signOut();">Sign out</a>
 
-    <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-        }
+    <!--Table-->
+    <div class="container">
+        <table class="table" id="mytable">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Document Name</th>
+                    <th>View Document</th>
+                    <th>Description</th>
+                    <th>Product</th>
+                </tr>
+            </thead>
+            <tbody id="data"></tbody>
+        </table>
+    </div>
 
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-    </script>
+
 </body>
 
 </html>
